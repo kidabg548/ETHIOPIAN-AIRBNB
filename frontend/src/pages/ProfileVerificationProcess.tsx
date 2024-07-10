@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchCurrentUser, fetchCurrentUserForVerification } from "../api-client"; // Adjust import based on your structure
-
+import { useNavigate } from "react-router-dom";
 interface UserType {
   firstName: string;
   lastName: string;
@@ -16,6 +16,7 @@ interface VerificationStatus extends UserType {
 
 const VerificationStatusPage: React.FC = () => {
   const [verificationStatus, setVerificationStatus] = useState<VerificationStatus | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchVerificationStatus = async () => {
@@ -104,29 +105,42 @@ const VerificationStatusPage: React.FC = () => {
         <p className="mt-6 text-lg">To become a verified host, complete the steps below:</p>
 
         <div className="grid grid-cols-4 gap-4 mt-6">
-          <div className={`p-4 rounded-lg border-2 ${isNameComplete ? 'border-green-500' : 'border-red-500'}`}>
+          <div 
+            className={`p-4 rounded-lg border-2 ${isNameComplete ? 'border-green-500' : 'border-red-500'}`} 
+            onClick={() => !isNameComplete && navigate("/manage-account/personal-details")}
+          >
             <h2 className="text-xl font-semibold">Your name</h2>
             <p>First name, Last name</p>
             <div className={`mt-4 text-lg font-bold ${isNameComplete ? 'text-green-500' : 'text-red-500'}`}>
               {isNameComplete ? "Great" : "Incomplete"}
             </div>
           </div>
-          <div className={`p-4 rounded-lg border-2 ${isPhotoComplete ? 'border-green-500' : 'border-red-500'}`}>
+          <div 
+            className={`p-4 rounded-lg border-2 ${isPhotoComplete ? 'border-green-500' : 'border-red-500'}`} 
+            onClick={() => {
+              console.log("Navigating to /ManageAccount/PersonalDetails");
+              !isPhotoComplete && navigate("/manage-account/personal-details");
+            }}
+          >
             <h2 className="text-xl font-semibold">Photo</h2>
             <p>Upload your profile photo</p>
             <div className={`mt-4 text-lg font-bold ${isPhotoComplete ? 'text-green-500' : 'text-red-500'}`}>
               {isPhotoComplete ? "Great" : <button className="bg-blue-500 text-white px-4 py-2 rounded">Upload now</button>}
             </div>
           </div>
-          <div className={`p-4 rounded-lg border-2 ${isEmailComplete ? 'border-green-500' : 'border-red-500'}`}>
-            <h2 className="text-xl font-semibold">Email</h2>
+          <div 
+            className={`p-4 rounded-lg border-2 ${isEmailComplete ? 'border-green-500' : 'border-red-500'}`} 
+            onClick={() => !isEmailComplete && navigate("/manage-account/personal-details")}>     
+                   <h2 className="text-xl font-semibold">Email</h2>
             <p>Verify your email</p>
             <div className={`mt-4 text-lg font-bold ${isEmailComplete ? 'text-green-500' : 'text-red-500'}`}>
               {isEmailComplete ? "Great" : "Incomplete"}
             </div>
           </div>
-          <div className={`p-4 rounded-lg border-2 ${isPhoneComplete ? 'border-green-500' : 'border-red-500'}`}>
-            <h2 className="text-xl font-semibold">Phone number</h2>
+          <div 
+            className={`p-4 rounded-lg border-2 ${isPhoneComplete ? 'border-green-500' : 'border-red-500'}`} 
+            onClick={() => !isPhoneComplete && navigate("/manage-account/personal-details")}
+          >            <h2 className="text-xl font-semibold">Phone number</h2>
             <p>Verify your phone number</p>
             <div className={`mt-4 text-lg font-bold ${isPhoneComplete ? 'text-green-500' : <button className="bg-blue-500 text-white px-4 py-2 rounded">Add your phone number</button>}`}>
               {isPhoneComplete ? "Great" : "Incomplete"}

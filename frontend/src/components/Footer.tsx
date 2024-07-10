@@ -18,7 +18,7 @@ const Footer = () => {
           <h3 className="text-xl text-white font-bold mb-4">Quick Links</h3>
           <ul className="space-y-2">
             <li>
-              <Link to="/about-us" className="hover:text-white">About Us</Link>
+              <Link to="/Aboutus" className="hover:text-white">About Us</Link>
             </li>
             <li>
               <Link to="/contact-us" className="hover:text-white">Contact Us</Link>
@@ -27,10 +27,10 @@ const Footer = () => {
               <Link to="/faq" className="hover:text-white">FAQ</Link>
             </li>
             <li>
-              <Link to="/privacy-policy" className="hover:text-white">Privacy Policy</Link>
+              <Link to="/privacyandpolicy" className="hover:text-white">Privacy Policy</Link>
             </li>
             <li>
-              <Link to="/terms-and-conditions" className="hover:text-white">Terms and Conditions</Link>
+              <Link to="/termsandconditions" className="hover:text-white">Terms and Conditions</Link>
             </li>
           </ul>
         </div>

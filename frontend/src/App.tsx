@@ -35,6 +35,14 @@ import AddHotel2 from "./pages/AddHotel2";
 import AdminPendingHotelsPage from "./pages/AdminHotelPending";
 import Detail2 from "./pages/RoomBooking/Detail";
 import Booking2 from "./pages/RoomBooking/Booking";
+import LayoutMy from "./layouts/LayoutMy";
+import Arrivals from "./pages/Arrivals";
+import Departures from "./pages/Departures";
+import Reservations from "./pages/Reservations";
+import AboutUs from "./pages/aboutus";
+import PrivacyAndCookies from "./pages/PrivacyandCookies";
+import TermsAndConditions from "./pages/TermsandConditions";
+import Reviews from "./pages/MyReviews";
 
 function App() {
   const { isLoggedIn } = useAppContext();
@@ -79,6 +87,31 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/signin" element={<SignIn />} />
 
+              <Route
+              path="/termsandconditions"
+              element={
+                <LayoutMy>
+                  <TermsAndConditions />
+                </LayoutMy>
+              }
+            />
+            <Route
+              path="/privacyandpolicy"
+              element={
+                <LayoutMy>
+                  <PrivacyAndCookies />
+                </LayoutMy>
+              }
+            />
+            <Route
+              path="/Aboutus"
+              element={
+                <LayoutMy>
+                  <AboutUs />
+                </LayoutMy>
+              }
+            />
+
         {isLoggedIn && (
           <>
             {/* <Route
@@ -90,7 +123,7 @@ function App() {
               }
             /> */}
 
-                <Route
+            <Route
               path="/hotel/:hotelId/booking"
               element={
                 <Layout>
@@ -120,33 +153,59 @@ function App() {
             <Route
               path="/edit-hotel/:hotelId"
               element={
-                <Layout>
+                <LayoutMy>
                   <EditHotel />
-                </Layout>
+                </LayoutMy>
               }
             />
 
             <Route
               path="/my-hotels"
               element={
-                <Layout>
+                <LayoutMy>
                   <MyHotels />
-                </Layout>
+                </LayoutMy>
+              }
+            />
+            {/* Add your Arrivals and Departures routes */}
+            <Route
+              path="/arrivals"
+              element={
+                <LayoutMy>
+                  <Arrivals />
+                </LayoutMy>
+              }
+            />
+
+            <Route
+              path="/departures"
+              element={
+                <LayoutMy>
+                  <Departures />
+                </LayoutMy>
+              }
+            />
+            <Route
+              path="/reservations"
+              element={
+                <LayoutMy>
+                  <Reservations />
+                </LayoutMy>
               }
             />
 
             <Route
               path="/my-bookings"
               element={
-                <Layout>
+                <LayoutMy>
                   <MyBookings />
-                </Layout>
+                </LayoutMy>
               }
             />
 
             <Route
               path="/hotel/:hotelId/:bookingId/review"
-              element={<ReviewForm />}
+              element={<LayoutMy><ReviewForm /> </LayoutMy>}
             />
             <Route path="/manage-account" element={<ManageAccount />} />
             <Route path="/room" element={<RoomForm />} />
@@ -167,7 +226,7 @@ function App() {
 
             <Route
               path="/verification-status"
-              element={<VerificationStatusPage />}
+              element={<LayoutMy><VerificationStatusPage /> </LayoutMy>}
             />
             <Route path="/list-property" element={<ListPropertyPage />} />
 
@@ -191,8 +250,12 @@ function App() {
             />
 
             <Route path="/saved" element={<Saved />} />
+            <Route path="/reviews" element={< Reviews/>} />
+
           </>
         )}
+
+
 
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

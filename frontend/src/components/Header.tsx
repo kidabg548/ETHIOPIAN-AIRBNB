@@ -29,8 +29,7 @@ const Header = () => {
       <div className="container mx-auto flex justify-between items-center px-4">
         <div className="flex items-center space-x-2">
           <Link to="/">
-            <img src={logo} alt="HULUBEAND Logo" className="h-10" />
-          </Link>
+          <h2 style={{ color: "blue", fontWeight: "bold",fontSize:30 }}>HULU-BEAND </h2>          </Link>
         </div>
 
         <nav className="flex space-x-4">

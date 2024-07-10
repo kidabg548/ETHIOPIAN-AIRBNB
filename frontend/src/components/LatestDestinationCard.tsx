@@ -53,7 +53,7 @@ const LatestDestinationCard = ({ hotel }: Props) => {
   return (
     <Link
       to={`/detail/${hotel._id}`}
-      className="relative cursor-pointer overflow-hidden rounded-md"
+      className="relative cursor-pointer overflow-hidden rounded-md shadow-md"
     >
       <div className="h-[300px] relative">
         <img
@@ -65,18 +65,18 @@ const LatestDestinationCard = ({ hotel }: Props) => {
         {/* Heart Icon */}
         <div
           onClick={handleSaveClick}
-          className="absolute top-2 left-2 text-white cursor-pointer"
+          className="absolute top-4 right-4 text-white cursor-pointer rounded-full bg-white bg-opacity-50 p-2"
         >
           {isSaved ? (
-            <FaHeart className="text-2xl text-red-500" />
+            <FaHeart className="text-xl text-red-500" />
           ) : (
-            <FaRegHeart className="text-2xl text-white" />
+            <FaRegHeart className="text-xl text-white" />
           )}
         </div>
       </div>
 
-      <div className="absolute bottom-0 p-4 bg-black bg-opacity-50 w-full rounded-b-md">
-        <span className="text-white font-bold tracking-tight text-3xl">
+      <div className="absolute bottom-0 p-4 w-full rounded-b-md bg-gray-800 bg-opacity-70 text-white">
+        <span className="text-lg font-bold tracking-tight">
           {hotel.name}
         </span>
       </div>

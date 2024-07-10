@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { roomTypes, roomAmenities } from "../../config/hotel-options-config";
+import { roomTypes, roomAmenities, cancellationPolicyRules } from "../../config/hotel-options-config";
 import { FaBed, FaDollarSign, FaDoorOpen, FaCog } from "react-icons/fa";
 
 export type RoomFormData = {
@@ -9,6 +9,7 @@ export type RoomFormData = {
   amenities: string[];
   availability: boolean;
   numberOfRooms: number; // Add number of rooms
+  cancellationPolicy: string; // Add cancellationPolicy
 };
 
 const RoomForm = ({ onRoomDataChange }: { onRoomDataChange: (roomData: RoomFormData) => void }) => {  
@@ -19,6 +20,7 @@ const RoomForm = ({ onRoomDataChange }: { onRoomDataChange: (roomData: RoomFormD
     amenities: [],
     availability: true,
     numberOfRooms: 1, // Set initial number of rooms
+    cancellationPolicy: cancellationPolicyRules[0], // Default to the first cancellation policy
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -37,6 +39,15 @@ const RoomForm = ({ onRoomDataChange }: { onRoomDataChange: (roomData: RoomFormD
     });
     onRoomDataChange(roomData); // Call onRoomDataChange on checkbox change
   };
+
+  const handleCancellationPolicyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const { value } = e.target;
+  setRoomData((prevData) => {
+    const updatedData = { ...prevData, cancellationPolicy: value };
+    onRoomDataChange(updatedData); // Call onRoomDataChange with updated roomData
+    return updatedData;
+  });
+};
 
   const commissionPercentage = 8; // Commission percentage
   const commission = roomData.pricePerNight * (commissionPercentage / 100);
@@ -114,8 +125,6 @@ const RoomForm = ({ onRoomDataChange }: { onRoomDataChange: (roomData: RoomFormD
           required
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
-       
-
 
         {roomData.pricePerNight > 0 && (
           <div className="mt-2">
@@ -135,8 +144,6 @@ const RoomForm = ({ onRoomDataChange }: { onRoomDataChange: (roomData: RoomFormD
         )}
       </div>
 
-    
-
       <div>
         <label className="flex items-center gap-2 font-bold text-gray-700">
           <FaCog /> Amenities:
@@ -155,6 +162,24 @@ const RoomForm = ({ onRoomDataChange }: { onRoomDataChange: (roomData: RoomFormD
             </div>
           ))}
         </div>
+      </div>
+
+      <div>
+        <label htmlFor="cancellationPolicy" className="flex items-center gap-2 font-bold text-gray-700">
+          Cancellation Policy:
+        </label>
+        <select
+          name="cancellationPolicy"
+          id="cancellationPolicy"
+          value={roomData.cancellationPolicy}
+          onChange={handleCancellationPolicyChange}
+          required
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        >
+          {cancellationPolicyRules.map((rule) => (
+            <option key={rule} value={rule}>{rule}</option>
+          ))}
+        </select>
       </div>
 
       

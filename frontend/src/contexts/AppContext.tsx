@@ -6,8 +6,6 @@ import { loadStripe, Stripe } from "@stripe/stripe-js";
 
 const STRIPE_PUB_KEY = import.meta.env.VITE_STRIPE_PUB_KEY || "";
 
-
-
 type ToastMessage = {
   message: string;
   type: "SUCCESS" | "ERROR";

@@ -56,10 +56,10 @@ const PersonalDetails: React.FC = () => {
 
   const [isVerifyingEmail, setIsVerifyingEmail] = useState(false);
   const [otp, setOtp] = useState(""); // State for OTP input
-const [isOTPSent, setIsOTPSent] = useState(false); // State to check if OTP has been sent
-const [isOTPVerified, setIsOTPVerified] = useState(false); // State to check if OTP has been verified
-const [error, setError] = useState(""); 
-const [userId, setUserId] = useState<string | null>(null)
+  const [isOTPSent, setIsOTPSent] = useState(false); // State to check if OTP has been sent
+  const [isOTPVerified, setIsOTPVerified] = useState(false); // State to check if OTP has been verified
+  const [error, setError] = useState("");
+  const [userId, setUserId] = useState<string | null>(null);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -87,17 +87,16 @@ const [userId, setUserId] = useState<string | null>(null)
     setIsEditing(field);
   };
 
-   
   const handleSendOTP = async () => {
     setIsVerifyingEmail(true);
     setError("");
-  
+
     if (!formData.email) {
       setError("Email is required to send OTP.");
       setIsVerifyingEmail(false);
       return;
     }
-  
+
     try {
       const response = await apiClient.sendEmailVerification(formData.email);
       if (response.message === "OTP sent successfully") {
@@ -112,29 +111,28 @@ const [userId, setUserId] = useState<string | null>(null)
       setIsVerifyingEmail(false);
     }
   };
-  
+
   const handleVerifyOTP = async () => {
     setIsVerifyingEmail(true);
     setError("");
-  
+
     if (!formData.email || !userId) {
       setError("Email and User ID are required to verify OTP.");
       setIsVerifyingEmail(false);
       return;
     }
-  
+
     try {
-      
-      const response = await fetch('http://localhost:7000/api/verify-otp', {
-        method: 'POST',
+      const response = await fetch("http://localhost:7000/api/verify-otp", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ userId, otp }),
       });
-  
+
       console.log("API Response (before parsing):", response);
-  
+
       if (response.ok) {
         const data = await response.json();
         console.log("API Response (parsed):", data);
@@ -156,9 +154,9 @@ const [userId, setUserId] = useState<string | null>(null)
       setIsVerifyingEmail(false);
     }
   };
-  
+
   // Function to handle OTP input change
-  const handleOTPChange = (e:any) => {
+  const handleOTPChange = (e: any) => {
     setOtp(e.target.value);
   };
 
@@ -223,6 +221,30 @@ const [userId, setUserId] = useState<string | null>(null)
     }
   };
 
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const handleDeleteAccountClick = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleConfirmDeleteAccount = async () => {
+    try {
+      await apiClient.deactivateAccount(); // API call to deactivate account
+
+      // Clear any local authentication state or tokens
+      showToast({ message: "Account deleted successfully", type: "SUCCESS" });
+      navigate("/"); // Navigate the user back to the homepage
+    } catch (error: any) {
+      showToast({ message: error.message, type: "ERROR" });
+    } finally {
+      setIsDeleteModalOpen(false);
+    }
+  };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -236,6 +258,7 @@ const [userId, setUserId] = useState<string | null>(null)
         const userDetails = await fetchCurrentUser();
         if (userDetails.dateOfBirth) {
           userDetails.dateOfBirth = new Date(userDetails.dateOfBirth);
+          
         }
 
         if (userDetails.passportDetails?.expiryDate) {
@@ -248,7 +271,7 @@ const [userId, setUserId] = useState<string | null>(null)
           profilePicture: userDetails.profilePicture || null, // Set profilePicture from userDetails
           isEmailVerified: userDetails.isEmailVerified || false,
         };
-  
+
         setIsOTPVerified(userDetails.isEmailVerified || false);
         setFormData(convertedDetails);
 
@@ -256,7 +279,6 @@ const [userId, setUserId] = useState<string | null>(null)
         if (userDetails._id) {
           setUserId(userDetails._id); // Ensure userId is stored in the state
         }
-
       } catch (error) {
         console.error("Error fetching user details:", error);
         // Handle errors appropriately, like displaying an error message
@@ -341,43 +363,48 @@ const [userId, setUserId] = useState<string | null>(null)
             </p>
           </div>
           <div className="flex items-center mb-3">
-  {/* Flex for side by side */}
-  <div className="-mb-2 mr-2">
-    <div className="flex justify-start">
-      <label
-        htmlFor="profilePictureInput"
-        className="relative cursor-pointer"
-      >
-        <input
-          type="file"
-          id="profilePictureInput"
-          name="profilePicture"
-          accept="image/*"
-          onChange={handleFileChange}
-          className="hidden"
-        />
-        <div className="relative w-24 h-24 rounded-full overflow-hidden border border-gray-300">
-        {previewUrl || typeof formData.profilePicture === 'string' ? (
-    <img
-      src={previewUrl || (typeof formData.profilePicture === 'string' ? formData.profilePicture : undefined)}  // Ensure src is a string
-      alt="Profile Preview"
-      className="w-full h-full object-cover"
-    />
-          ) : (
-            <div className="flex items-center justify-center w-full h-full rounded-full bg-blue-500 font-bold relative">
-              <span className="text-5xl font-bold text-white">
-                {formData.firstName ? formData.firstName[0] : ""}
-              </span>
-              
-              <FaCamera className="absolute text-white text-2xl bottom-2 left-1/2 transform -translate-x-1/2" /> {/* Positioned at the bottom center */}
+            {/* Flex for side by side */}
+            <div className="-mb-2 mr-2">
+              <div className="flex justify-start">
+                <label
+                  htmlFor="profilePictureInput"
+                  className="relative cursor-pointer"
+                >
+                  <input
+                    type="file"
+                    id="profilePictureInput"
+                    name="profilePicture"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                  <div className="relative w-24 h-24 rounded-full overflow-hidden border border-gray-300">
+                    {previewUrl ||
+                    typeof formData.profilePicture === "string" ? (
+                      <img
+                        src={
+                          previewUrl ||
+                          (typeof formData.profilePicture === "string"
+                            ? formData.profilePicture
+                            : undefined)
+                        } // Ensure src is a string
+                        alt="Profile Preview"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center w-full h-full rounded-full bg-blue-500 font-bold relative">
+                        <span className="text-5xl font-bold text-white">
+                          {formData.firstName ? formData.firstName[0] : ""}
+                        </span>
+                        <FaCamera className="absolute text-white text-2xl bottom-2 left-1/2 transform -translate-x-1/2" />{" "}
+                        {/* Positioned at the bottom center */}
+                      </div>
+                    )}
+                  </div>
+                </label>
+              </div>
             </div>
-          )}
-        </div>
-      </label>
-    </div>
-  </div>
-</div>
-
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-6">
@@ -486,94 +513,107 @@ const [userId, setUserId] = useState<string | null>(null)
                       </label>
                     </>
                   )}
-            {item.field === "email" && (
-  <div className="bg-white rounded-lg shadow-md p-4 flex flex-col cursor-pointer hover:bg-gray-50 transition">
-    {/* Verification Status Indicator */}
-    {isOTPVerified && (
-      <div className="bg-green-100 text-green-800 text-sm px-2 py-1 rounded mb-4 flex items-center">
-        <FaCheck className="mr-2" /> Email Verified
-      </div>
-    )}
-    
-    <div className="flex items-center mb-4">
-      <div className="w-10 h-10 flex items-center justify-center text-gray-600">
-        {item.icon}
-      </div>
-      <div className="ml-4 flex-1">
-        <h3 className="text-xl font-semibold">{item.label}</h3>
-        <div className="flex items-center">
-          <p className="text-gray-600">{formData.email || 'N/A'}</p>
-          {isOTPVerified && (
-            <FaCheck className="text-green-500 ml-2" />
-          )}
-        </div>
-      </div>
-    </div>
-    {isEditing === item.field && (
-      <div>
-        {!isOTPVerified && (
-          <>
-            <label className="block mb-2">
-              Email Address
-              <input
-                type="email"
-                name="email"
-                value={formData.email || ''} 
-                onChange={handleChange}
-                className="block w-full mt-1 border rounded p-2"
-              />
-            </label>
-            {formData.email && !isVerifyingEmail && !isOTPSent && (
-              <button
-                className="bg-blue-600 text-white px-4 py-2 rounded mt-2 cursor-pointer"
-                onClick={handleSendOTP}
-              >
-                Send Verification OTP
-              </button>
-            )}
+                  {item.field === "email" && (
+                    <div className="bg-white rounded-lg shadow-md p-4 flex flex-col cursor-pointer hover:bg-gray-50 transition">
+                      {/* Verification Status Indicator */}
+                      {isOTPVerified && (
+                        <div className="bg-green-100 text-green-800 text-sm px-2 py-1 rounded mb-4 flex items-center">
+                          <FaCheck className="mr-2" /> Email Verified
+                        </div>
+                      )}
 
-            {isOTPSent && (
-              <div>
-                <label className="block mb-2">
-                  Enter OTP
-                  <input
-                    type="text"
-                    name="otp"
-                    value={otp}
-                    onChange={handleOTPChange}
-                    className="block w-full mt-1 border rounded p-2"
-                  />
-                </label>
-                <button
-                  className="bg-green-600 text-white px-4 py-2 rounded mt-2 cursor-pointer"
-                  onClick={handleVerifyOTP} disabled={isVerifyingEmail}
-                >
-                  Verify OTP
-                </button>
-              </div>
-            )}
+                      <div className="flex items-center mb-4">
+                        <div className="w-10 h-10 flex items-center justify-center text-gray-600">
+                          {item.icon}
+                        </div>
+                        <div className="ml-4 flex-1">
+                          <h3 className="text-xl font-semibold">
+                            {item.label}
+                          </h3>
+                          <div className="flex items-center">
+                            <p className="text-gray-600">
+                              {formData.email || "N/A"}
+                            </p>
+                            {isOTPVerified && (
+                              <FaCheck className="text-green-500 ml-2" />
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      {isEditing === item.field && (
+                        <div>
+                          {!isOTPVerified && (
+                            <>
+                              <label className="block mb-2">
+                                Email Address
+                                <input
+                                  type="email"
+                                  name="email"
+                                  value={formData.email || ""}
+                                  onChange={handleChange}
+                                  className="block w-full mt-1 border rounded p-2"
+                                />
+                              </label>
+                              {formData.email &&
+                                !isVerifyingEmail &&
+                                !isOTPSent && (
+                                  <button
+                                    className="bg-blue-600 text-white px-4 py-2 rounded mt-2 cursor-pointer"
+                                    onClick={handleSendOTP}
+                                  >
+                                    Send Verification OTP
+                                  </button>
+                                )}
 
-            {isVerifyingEmail && !isOTPSent && (
-              <div className="text-gray-600">Sending verification OTP...</div>
-            )}
+                              {isOTPSent && (
+                                <div>
+                                  <label className="block mb-2">
+                                    Enter OTP
+                                    <input
+                                      type="text"
+                                      name="otp"
+                                      value={otp}
+                                      onChange={handleOTPChange}
+                                      className="block w-full mt-1 border rounded p-2"
+                                    />
+                                  </label>
+                                  <button
+                                    className="bg-green-600 text-white px-4 py-2 rounded mt-2 cursor-pointer"
+                                    onClick={handleVerifyOTP}
+                                    disabled={isVerifyingEmail}
+                                  >
+                                    Verify OTP
+                                  </button>
+                                </div>
+                              )}
 
-            {isVerifyingEmail && isOTPSent && (
-              <div className="text-gray-600">Verifying OTP...</div>
-            )}
+                              {isVerifyingEmail && !isOTPSent && (
+                                <div className="text-gray-600">
+                                  Sending verification OTP...
+                                </div>
+                              )}
 
-            {error && (
-              <div className="text-red-600 mt-2">{error}</div>
-            )}
-          </>
-        )}
+                              {isVerifyingEmail && isOTPSent && (
+                                <div className="text-gray-600">
+                                  Verifying OTP...
+                                </div>
+                              )}
 
-        {isOTPVerified && (
-          <div className="text-green-600 mt-2">Email Verified Successfully!</div>
-        )}
-      </div>
-    )}
-  </div>
-)}
+                              {error && (
+                                <div className="text-red-600 mt-2">{error}</div>
+                              )}
+                            </>
+                          )}
+
+                          {isOTPVerified && (
+                            <div className="text-green-600 mt-2">
+                              Email Verified Successfully!
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
                   {item.field === "phoneNumber" && (
                     <label className="block mb-2">
                       Phone Number
@@ -771,6 +811,41 @@ const [userId, setUserId] = useState<string | null>(null)
               )}
             </div>
           ))}
+        </div>
+
+        {isDeleteModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+              <h2 className="text-xl font-bold mb-4">Delete Account</h2>
+              <p className="text-gray-700 mb-6">
+                Are you sure you want to delete your account? This action cannot
+                be undone.
+              </p>
+              <div className="flex justify-end">
+                <button
+                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2"
+                  onClick={closeDeleteModal}
+                >
+                  No
+                </button>
+                <button
+                  className="bg-red-600 text-white px-4 py-2 rounded"
+                  onClick={handleConfirmDeleteAccount}
+                >
+                  Yes, Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="mt-8">
+          <button
+            className="bg-red-600 text-white px-4 py-2 rounded mt-4 hover:bg-red-500 transition duration-200"
+            onClick={handleDeleteAccountClick}
+          >
+            Delete Account
+          </button>
         </div>
       </div>
 

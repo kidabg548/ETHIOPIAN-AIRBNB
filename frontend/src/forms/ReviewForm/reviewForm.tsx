@@ -65,158 +65,200 @@ const ReviewForm = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto rounded-lg shadow-lg p-6 bg-white">
+    <div className="max-w-2xl mx-auto rounded-lg shadow-xl p-8 bg-white mt-16"> {/* Added mt-16 for top margin */}
+
+      <h2 className="text-3xl font-extrabold text-blue-800 text-center mb-4">Share Your Experience</h2>
+
       <form onSubmit={handleSubmit} className="space-y-4">
-        <h2 className="text-2xl font-bold text-gray-800 text-center">Share Your Experience</h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="staffRating" className="flex items-center gap-2 font-bold text-gray-700">
-              <FaUserTie /> Staff Rating:
+          {/* Rating Input Components */}
+          {/* Example for Staff Rating (Repeat for other ratings) */}
+          <div className="flex flex-col">
+            <label htmlFor="staffRating" className="font-bold text-gray-700">
+              <FaUserTie className="mr-2" /> Staff Rating:
             </label>
-            <input
-              type="number"
-              name="staffRating"
-              id="staffRating"
-              value={formData.staffRating} 
-              onChange={handleChange}
-              min="1"
-              max="10"
-              placeholder="0"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              onFocus={(e) => {
-                if (e.target.value === '0') {
-                  e.target.value = ''; // Clear the input value if it's "0"
-                }
-              }}
-            />
+            <div className="relative">
+              <input
+                type="number"
+                name="staffRating"
+                id="staffRating"
+                value={formData.staffRating}
+                onChange={handleChange}
+                min="1"
+                max="10"
+                placeholder="0"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                onFocus={(e) => {
+                  if (e.target.value === '0') {
+                    e.target.value = ''; // Clear the input value if it's "0"
+                  }
+                }}
+              />
+              <div className="absolute top-1/2 right-2 transform -translate-y-1/2">
+                <span className="text-gray-500">{formData.staffRating || 0}/10</span>
+              </div>
+            </div>
           </div>
-          <div>
-            <label htmlFor="facilitiesRating" className="flex items-center gap-2 font-bold text-gray-700">
-              <FaHotel /> Facilities Rating:
+
+          {/* Repeat above structure for other ratings (facilities, cleanliness, etc.) */}
+          <div className="flex flex-col">
+            <label htmlFor="facilitiesRating" className="font-bold text-gray-700">
+              <FaHotel className="mr-2" /> Facilities Rating:
             </label>
-            <input
-              type="number"
-              name="facilitiesRating"
-              id="facilitiesRating"
-              value={formData.facilitiesRating} 
-              onChange={handleChange}
-              min="1"
-              max="10"
-              placeholder="0"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              onFocus={(e) => {
-                if (e.target.value === '0') {
-                  e.target.value = ''; // Clear the input value if it's "0"
-                }
-              }}
-            />
+            <div className="relative">
+              <input
+                type="number"
+                name="facilitiesRating"
+                id="facilitiesRating"
+                value={formData.facilitiesRating}
+                onChange={handleChange}
+                min="1"
+                max="10"
+                placeholder="0"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                onFocus={(e) => {
+                  if (e.target.value === '0') {
+                    e.target.value = ''; // Clear the input value if it's "0"
+                  }
+                }}
+              />
+              <div className="absolute top-1/2 right-2 transform -translate-y-1/2">
+                <span className="text-gray-500">{formData.facilitiesRating || 0}/10</span>
+              </div>
+            </div>
           </div>
-          <div>
-            <label htmlFor="cleanlinessRating" className="flex items-center gap-2 font-bold text-gray-700">
-              <FaBrush /> Cleanliness Rating:
+          <div className="flex flex-col">
+            <label htmlFor="cleanlinessRating" className="font-bold text-gray-700">
+              <FaBrush className="mr-2" /> Cleanliness Rating:
             </label>
-            <input
-              type="number"
-              name="cleanlinessRating"
-              id="cleanlinessRating"
-              value={formData.cleanlinessRating} 
-              onChange={handleChange}
-              min="1"
-              max="10"
-              placeholder="0"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              onFocus={(e) => {
-                if (e.target.value === '0') {
-                  e.target.value = ''; // Clear the input value if it's "0"
-                }
-              }}
-            />
+            <div className="relative">
+              <input
+                type="number"
+                name="cleanlinessRating"
+                id="cleanlinessRating"
+                value={formData.cleanlinessRating}
+                onChange={handleChange}
+                min="1"
+                max="10"
+                placeholder="0"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                onFocus={(e) => {
+                  if (e.target.value === '0') {
+                    e.target.value = ''; // Clear the input value if it's "0"
+                  }
+                }}
+              />
+              <div className="absolute top-1/2 right-2 transform -translate-y-1/2">
+                <span className="text-gray-500">{formData.cleanlinessRating || 0}/10</span>
+              </div>
+            </div>
           </div>
-          <div>
-            <label htmlFor="comfortRating" className="flex items-center gap-2 font-bold text-gray-700">
-              <FaBed /> Comfort Rating:
+          <div className="flex flex-col">
+            <label htmlFor="comfortRating" className="font-bold text-gray-700">
+              <FaBed className="mr-2" /> Comfort Rating:
             </label>
-            <input
-              type="number"
-              name="comfortRating"
-              id="comfortRating"
-              value={formData.comfortRating} 
-              onChange={handleChange}
-              min="1"
-              max="10"
-              placeholder="0"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              onFocus={(e) => {
-                if (e.target.value === '0') {
-                  e.target.value = ''; // Clear the input value if it's "0"
-                }
-              }}
-            />
+            <div className="relative">
+              <input
+                type="number"
+                name="comfortRating"
+                id="comfortRating"
+                value={formData.comfortRating}
+                onChange={handleChange}
+                min="1"
+                max="10"
+                placeholder="0"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                onFocus={(e) => {
+                  if (e.target.value === '0') {
+                    e.target.value = ''; // Clear the input value if it's "0"
+                  }
+                }}
+              />
+              <div className="absolute top-1/2 right-2 transform -translate-y-1/2">
+                <span className="text-gray-500">{formData.comfortRating || 0}/10</span>
+              </div>
+            </div>
           </div>
-          <div>
-            <label htmlFor="valueForMoneyRating" className="flex items-center gap-2 font-bold text-gray-700">
-              <FaMoneyBillWave /> Value for Money Rating:
+          <div className="flex flex-col">
+            <label htmlFor="valueForMoneyRating" className="font-bold text-gray-700">
+              <FaMoneyBillWave className="mr-2" /> Value for Money Rating:
             </label>
-            <input
-              type="number"
-              name="valueForMoneyRating"
-              id="valueForMoneyRating"
-              value={formData.valueForMoneyRating} 
-              onChange={handleChange}
-              min="1"
-              max="10"
-              placeholder="0"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              onFocus={(e) => {
-                if (e.target.value === '0') {
-                  e.target.value = ''; // Clear the input value if it's "0"
-                }
-              }}
-            />
+            <div className="relative">
+              <input
+                type="number"
+                name="valueForMoneyRating"
+                id="valueForMoneyRating"
+                value={formData.valueForMoneyRating}
+                onChange={handleChange}
+                min="1"
+                max="10"
+                placeholder="0"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                onFocus={(e) => {
+                  if (e.target.value === '0') {
+                    e.target.value = ''; // Clear the input value if it's "0"
+                  }
+                }}
+              />
+              <div className="absolute top-1/2 right-2 transform -translate-y-1/2">
+                <span className="text-gray-500">{formData.valueForMoneyRating || 0}/10</span>
+              </div>
+            </div>
           </div>
-          <div>
-            <label htmlFor="locationRating" className="flex items-center gap-2 font-bold text-gray-700">
-              <FaMapMarkerAlt /> Location Rating:
+          <div className="flex flex-col">
+            <label htmlFor="locationRating" className="font-bold text-gray-700">
+              <FaMapMarkerAlt className="mr-2" /> Location Rating:
             </label>
-            <input
-              type="number"
-              name="locationRating"
-              id="locationRating"
-              value={formData.locationRating} 
-              onChange={handleChange}
-              min="1"
-              max="10"
-              placeholder="0"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              onFocus={(e) => {
-                if (e.target.value === '0') {
-                  e.target.value = ''; // Clear the input value if it's "0"
-                }
-              }}
-            />
+            <div className="relative">
+              <input
+                type="number"
+                name="locationRating"
+                id="locationRating"
+                value={formData.locationRating}
+                onChange={handleChange}
+                min="1"
+                max="10"
+                placeholder="0"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                onFocus={(e) => {
+                  if (e.target.value === '0') {
+                    e.target.value = ''; // Clear the input value if it's "0"
+                  }
+                }}
+              />
+              <div className="absolute top-1/2 right-2 transform -translate-y-1/2">
+                <span className="text-gray-500">{formData.locationRating || 0}/10</span>
+              </div>
+            </div>
           </div>
-          <div>
-            <label htmlFor="freeWifiRating" className="flex items-center gap-2 font-bold text-gray-700">
-              <FaWifi /> Free Wifi Rating:
+          <div className="flex flex-col">
+            <label htmlFor="freeWifiRating" className="font-bold text-gray-700">
+              <FaWifi className="mr-2" /> Free Wifi Rating:
             </label>
-            <input
-              type="number"
-              name="freeWifiRating"
-              id="freeWifiRating"
-              value={formData.freeWifiRating} 
-              onChange={handleChange}
-              min="1"
-              max="10"
-              placeholder="0"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              onFocus={(e) => {
-                if (e.target.value === '0') {
-                  e.target.value = ''; // Clear the input value if it's "0"
-                }
-              }}
-            />
+            <div className="relative">
+              <input
+                type="number"
+                name="freeWifiRating"
+                id="freeWifiRating"
+                value={formData.freeWifiRating}
+                onChange={handleChange}
+                min="1"
+                max="10"
+                placeholder="0"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                onFocus={(e) => {
+                  if (e.target.value === '0') {
+                    e.target.value = ''; // Clear the input value if it's "0"
+                  }
+                }}
+              />
+              <div className="absolute top-1/2 right-2 transform -translate-y-1/2">
+                <span className="text-gray-500">{formData.freeWifiRating || 0}/10</span>
+              </div>
+            </div>
           </div>
+
         </div>
 
         <div className="mt-4">

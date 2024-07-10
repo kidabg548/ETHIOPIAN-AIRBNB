@@ -6,11 +6,14 @@ import * as apiClient from '../api-client';
 import DetailCard from '../components/DetailsCard';
 import { useAppContext } from '../contexts/AppContext';
 import { HotelType, SavedHotelType } from '../../../backend/shared/types';
+import { useMutation, useQueryClient } from 'react-query';
 
 const Saved = () => {
   const { isLoggedIn, showToast } = useAppContext();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient();
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const [fetchedHotels, setFetchedHotels] = useState<HotelType[]>([]);
@@ -37,9 +40,7 @@ const Saved = () => {
     }
   }, [isLoggedIn, showToast]);
 
-  const handleSignOut = () => {
-    // Sign-out logic here 
-  };
+ 
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -59,6 +60,22 @@ const Saved = () => {
   const handleCardClick = (hotelId: string) => {
     navigate(`/detail/${hotelId}`);
   };
+
+  const mutation = useMutation(apiClient.signOut, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries("validateToken");
+      showToast({ message: "Signed Out!", type: "SUCCESS" });
+      navigate("/login"); // Redirect to login page after sign out
+    },
+    onError: (error: Error) => {
+      showToast({ message: error.message, type: "ERROR" });
+    },
+  });
+
+  const handleSignOut = () => {
+    mutation.mutate();
+  };
+
 
   return (
     <div className="container mx-auto p-6">
@@ -116,8 +133,8 @@ const Saved = () => {
                 </li>
                 <li>
                   <button
-                    onClick={handleSignOut}
-                    className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center text-lg"
+                 onClick={handleSignOut}
+                   className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center text-lg"
                   >
                     <FaSignOutAlt className="text-lg mr-2" />
                     Sign Out

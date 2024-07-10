@@ -26,6 +26,8 @@ export type HotelFormData2 = {
     latitude: number;
     longitude: number;
   };
+  // pdfFile?: File; // Add this line if you want to handle a PDF file
+
 };
 
 type Props = {
@@ -49,7 +51,7 @@ const ManageHotelForm2 = ({ onSave, isLoading, hotel }: Props) => {
 
   // State for room form step navigation
   const [roomFormStep, setRoomFormStep] = useState(1);
-  const totalRoomFormSteps = 3; // Total steps for room form
+  const totalRoomFormSteps = 1; // Total steps for room form
 
   // State for storing the saved property details data
   const [savedPropertyDetails, setSavedPropertyDetails] =
@@ -58,13 +60,15 @@ const ManageHotelForm2 = ({ onSave, isLoading, hotel }: Props) => {
     useState(false); // Track property details completion
   const [isRoomDetailsComplete, setIsRoomDetailsComplete] = useState(false); // Track room details completion
 
+  // State for storing room form data
   const [roomData, setRoomData] = useState<RoomFormData>({
     roomType: "",
     capacity: 1,
     pricePerNight: 0,
     amenities: [],
     availability: true,
-    numberOfRooms: 0, // Add number of rooms
+    numberOfRooms: 1, // Add number of rooms
+    cancellationPolicy: "", // Add cancellationPolicy
   });
 
   useEffect(() => {
@@ -107,12 +111,18 @@ const ManageHotelForm2 = ({ onSave, isLoading, hotel }: Props) => {
       );
     }
 
+    // if (formDataJson.pdfFile) {
+    //   formData.append("pdfFile", formDataJson.pdfFile);
+    // }
+    // Append room data to formData
     formData.append("roomType", roomData.roomType);
     formData.append("capacity", roomData.capacity.toString());
     formData.append("pricePerNight", roomData.pricePerNight.toString());
     formData.append("numberOfRooms", roomData.numberOfRooms.toString());
     formData.append("amenities", JSON.stringify(roomData.amenities));
     formData.append("availability", roomData.availability.toString());
+    formData.append("cancellationPolicy", roomData.cancellationPolicy); // Add cancellationPolicy
+
     onSave(formData);
   });
 
@@ -133,6 +143,8 @@ const ManageHotelForm2 = ({ onSave, isLoading, hotel }: Props) => {
   }; // Default location
 
   const handlePropertyDetailsNextStep = () => {
+
+    
     if (propertyDetailsStep < totalPropertySteps) {
       setPropertyDetailsStep(propertyDetailsStep + 1);
     } else {
@@ -171,6 +183,7 @@ const ManageHotelForm2 = ({ onSave, isLoading, hotel }: Props) => {
           availability: roomData.availability,
           numberOfRooms: roomData.numberOfRooms,
           imageUrl: "", // Add an optional image URL if needed
+          cancellationPolicy: roomData.cancellationPolicy, // Add cancellationPolicy
         },
       ]);
 
@@ -346,7 +359,7 @@ const ManageHotelForm2 = ({ onSave, isLoading, hotel }: Props) => {
                   Previous
                 </button>
               )}
-              {roomFormStep < totalRoomFormSteps ? (
+              {roomFormStep <= totalRoomFormSteps ? (
                 <button
                   type="button"
                   onClick={handleRoomFormNextStep}

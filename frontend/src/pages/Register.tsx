@@ -76,7 +76,13 @@ const Register = () => {
               id="email"
               type="email"
               className={`border rounded w-full py-2 px-3 ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500`}
-              {...register("email", { required: "This field is required" })}
+              {...register("email", {
+                required: "This field is required",
+                pattern: {
+                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                  message: "Please enter a valid email address",
+                },
+              })}
             />
             {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
           </div>
@@ -93,6 +99,11 @@ const Register = () => {
                 minLength: {
                   value: 6,
                   message: "Password must be at least 6 characters",
+                },
+                pattern: {
+                  value: /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
+                  message:
+                    "Password must have at least one uppercase letter, one number, and one special character",
                 },
               })}
             />

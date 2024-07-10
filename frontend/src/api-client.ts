@@ -1,14 +1,15 @@
 import { RegisterFormData } from "./pages/Register";
 import { SignInFormData } from "./pages/SignIn";
-import { HotelSearchResponse,
+import { BookingType, HotelSearchResponse,
   HotelType,
-  PaymentIntentResponse, RoomType, SavedHotelType, UserType } from "../../backend/shared/types";
+  PaymentIntentResponse, ReviewType, RoomType, SavedHotelType, UserType } from "../../backend/shared/types";
 // import { BookingFormData } from "./forms/BookingForm/BookingForm";
 import {BookingFormData2} from "./forms/BookingForm2/BookingForm"
 import { ReviewFormData } from "./forms/ReviewForm/reviewForm";
 import { PersonalDetailsFormData } from "./pages/ManageAccount/PersonalDetails";
 import { RoomFormData } from "./forms/ManageHotelForm/RoomSection";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+import dayjs from "dayjs";
 
 export const fetchCurrentUser = async (): Promise<UserType> => {
   const response = await fetch(`${API_BASE_URL}/api/users/me`, {
@@ -171,7 +172,7 @@ export const addMyHotel = async (hotelFormData: FormData) => {
     method: "POST",
     credentials: "include",
     body: hotelFormData,
-  });
+  }); 
 
   if (!response.ok) {
     throw new Error("Failed to add hotel");
@@ -210,6 +211,18 @@ export const fetchMyHotels = async (): Promise<HotelType[]> => {
   return response.json();
 };
 
+export const fetchMyReviews = async (): Promise<ReviewType[]> => {
+  const response = await fetch(`${API_BASE_URL}/api/review/user`, {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Error fetching reviews");
+  }
+
+  return response.json();
+};
+
 
 export const fetchPendingHotels = async (): Promise<HotelType[]> => {
   const response = await fetch(`${API_BASE_URL}/api/admin/pending-hotels`, {
@@ -222,8 +235,6 @@ export const fetchPendingHotels = async (): Promise<HotelType[]> => {
   return response.json();
 };
 
-
-
 export const fetchMyHotelById = async (hotelId: string): Promise<HotelType> => {
   const response = await fetch(`${API_BASE_URL}/api/my-hotels/${hotelId}`, {
     credentials: "include",
@@ -235,6 +246,19 @@ export const fetchMyHotelById = async (hotelId: string): Promise<HotelType> => {
 
   return response.json();
 };
+
+export const fetchBookingByTicket = async (ticketNumber: string): Promise<BookingType> => {
+  const response = await fetch(`${API_BASE_URL}/api/my-bookings/${ticketNumber}`, {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Error fetching Hotels");
+  }
+
+  return response.json();
+};
+
 
 export const updateMyHotelById = async (hotelFormData: FormData) => {
   const response = await fetch(
@@ -328,7 +352,7 @@ export const fetchRoomsByHotelId = async (hotelId: string): Promise<RoomType[]> 
     throw new Error("Error fetching Rooms");
   }
 
-  return response.json();
+  return response.json(); 
 };
 
 export const createPaymentIntent = async (
@@ -502,4 +526,142 @@ export const verifyOtp = async (userId: string, otp: string) => {
     console.error("Error verifying OTP:", error);
     throw error;
   }
+};
+
+
+export const fetchReviewCount = async (hotelId: string) => {
+  const response = await fetch(`${API_BASE_URL}/api/review/${hotelId}/review-count`);
+  if (!response.ok) {
+    throw new Error("Error fetching review count");
+  }
+  const data = await response.json();
+  return data.count;
+};
+// api-client.js
+
+  // Assuming your API returns { bookingCount: ... }
+
+export const fetchBookingCount = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/my-bookings/owner/owner`, {
+      method: 'GET',
+      credentials: 'include', // Include credentials (cookies) if you're using authentication
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch bookings');
+    }
+
+    const data = await response.json();
+    return data.bookingCount; // Return the booking count or any other data you need
+  } catch (error) {
+    console.error('Error fetching owner bookings:', error);
+    // Handle error (e.g., show a toast or error message to the user)
+    return null;
+  }
+};
+export const fetchBookingsByCheckinDate = async (date: dayjs.Dayjs) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/my-bookings/checkin/${date.format('YYYY-MM-DD')}`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch bookings by check-in date');
+    }
+
+    const data = await response.json();
+    return data.bookings; // Assuming your backend sends an array of bookings
+  } catch (error) {
+    console.error('Error fetching bookings by check-in date:', error);
+    return []; // Return an empty array on error
+  }
+};
+
+export const fetchBookingsByCheckoutDate = async (date: dayjs.Dayjs) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/my-bookings/checkout/${date.format('YYYY-MM-DD')}`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch bookings by check-out date');
+    }
+
+    const data = await response.json();
+    return data.bookings; // Assuming your backend sends an array of bookings
+  } catch (error) {
+    console.error('Error fetching bookings by check-out date:', error);
+    return []; // Return an empty array on error
+  }
+};
+
+export const fetchBookingsByOwner = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/my-bookings/owner/bookings`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch bookings by ');
+    }
+
+    const data = await response.json();
+    return data.bookings; // Assuming your backend sends an array of bookings
+  } catch (error) {
+    console.error('Error fetching bookings', error);
+    return []; // Return an empty array on error
+  }
+};
+export const fetchHotelName = async (hotelId: string) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/hotels/${hotelId}`, {
+      method: 'GET',
+      credentials: 'include', 
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch hotel name');
+    }
+
+    const data = await response.json();
+    return data.name; 
+  } catch (error) {
+    console.error('Error fetching hotel name:', error);
+    return 'Hotel Not Found'; 
+  }
+};
+
+export const deactivateAccount = async () => {
+  const response = await fetch(`${API_BASE_URL}/api/users/deactivate`, {
+    method: "PUT",
+    credentials: "include", // Ensures cookies (auth token) are included
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error(body.message);
+  }
+  return body;
 };

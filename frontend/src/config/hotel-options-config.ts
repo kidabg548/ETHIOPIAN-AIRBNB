@@ -56,3 +56,13 @@ export const roomAmenities = [
   "Kitchenette",
   "Iron and Ironing Board",
 ];
+
+export const cancellationPolicyRules = [
+  "Free cancellation up to 24 hours before arrival",
+  "Free cancellation up to 48 hours before arrival",
+  "Free cancellation up to 72 hours before arrival",
+  "Free cancellation up to 7 days before arrival",
+  "Free cancellation up to 14 days before arrival",
+  "No refunds for cancellations within 24 hours of arrival",
+  "Non-refundable"
+];

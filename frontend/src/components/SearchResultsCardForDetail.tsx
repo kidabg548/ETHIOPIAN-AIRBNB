@@ -1,13 +1,14 @@
-import { Link } from "react-router-dom";
-import { HotelType } from "../../../backend/shared/types";
-import { AiFillStar } from "react-icons/ai";
-import { FaMapMarkerAlt } from "react-icons/fa";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { HotelType } from '../../../backend/shared/types';
+import { AiFillStar } from 'react-icons/ai';
+import { FaMapMarkerAlt } from 'react-icons/fa';
 
 type Props = {
   hotel: HotelType;
 };
 
-const SearchResultsCardForMap = ({ hotel }: Props) => {
+const SearchResultsCardForDetail: React.FC<Props> = ({ hotel }) => {
   return (
     <Link
       to={`/detail/${hotel._id}`}
@@ -16,15 +17,14 @@ const SearchResultsCardForMap = ({ hotel }: Props) => {
       <div className="border border-slate-300 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 hover:bg-blue-50 p-2">
         {/* Image and Hotel Details */}
         <div className="flex gap-4">
-          <div className="w-6/12 relative rounded-lg overflow-hidden"> {/* Reduced image width to 6/12 (half) */}
+          <div className="w-6/12 relative rounded-lg overflow-hidden">
             <img
               src={hotel.imageUrls[0]}
               alt={hotel.name}
-              className="w-full h-32 object-cover object-center" // Adjust height as needed
+              className="w-full h-32 object-cover object-center"
             />
-        
           </div>
-          <div className="w-6/12 flex flex-col justify-between"> {/* Increased text area width to 6/12 (half) */}
+          <div className="w-6/12 flex flex-col justify-between">
             <div>
               <div className="text-md font-bold cursor-pointer text-gray-800 hover:text-blue-600 transition-colors duration-300">
                 {hotel.name}
@@ -49,11 +49,11 @@ const SearchResultsCardForMap = ({ hotel }: Props) => {
                 View More
               </div>
             </div>
-          </div> 
+          </div>
         </div>
       </div>
     </Link>
   );
 };
 
-export default SearchResultsCardForMap;
+export default SearchResultsCardForDetail;
