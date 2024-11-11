@@ -1,5 +1,5 @@
 import express from 'express';
-import SavedHotel from '../models/savedhotel'; 
+import SavedHotel from '../models/SavedHotel'; 
 import Hotel from '../models/hotel'; 
 import { SavedHotelType } from '../../shared/types'; 
 import verifyToken from '../middleware/auth';
@@ -25,9 +25,6 @@ router.get('/', async (req, res) => {
 router.post('/:hotelId', async (req, res) => {
   const { hotelId } = req.params;
   const userId = req.userId;
-
-  
-
   try {
     const existingSavedHotel = await SavedHotel.findOne({ userId, hotelId });
     if (existingSavedHotel) {

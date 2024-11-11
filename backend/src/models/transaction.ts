@@ -4,6 +4,7 @@ export interface TransactionType extends Document {
   bookingId: mongoose.Types.ObjectId; // Reference to the Booking
   transactionId: string; // ID from the payment provider
   userId: string; // User ID associated with the booking
+  ticketNumber: string;
   hotelId: mongoose.Types.ObjectId; // Reference to the Hotel
   amount: number; // Total amount processed
   commissionAmount: number; // 8% for your company
@@ -16,6 +17,7 @@ const transactionSchema = new Schema<TransactionType>({
   bookingId: { type: mongoose.Schema.Types.ObjectId, ref: 'Booking', required: true },
   transactionId: { type: String, required: true },
   userId: { type: String, required: true }, // Add userId field
+  ticketNumber: { type: String, required: true }, // Add userId field
   hotelId: { type: mongoose.Schema.Types.ObjectId, ref: 'Hotel', required: true }, // Add hotelId field
   amount: { type: Number, required: true },
   commissionAmount: { type: Number, required: true },

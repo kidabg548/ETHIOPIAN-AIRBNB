@@ -15,6 +15,7 @@ import bookingRoutes from "./routes/my-bookings";
 import savedHotelsRoutes from './routes/savedHotels'
 import pendingHotelsRoutes from './routes/admin'
 import emailVerificationRoutes from "./routes/emailVerificationRoutes"
+import chapaRoutes from "./routes/chapaRoutes"
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -47,6 +48,7 @@ app.use("/api/rooms", roomRoutes);
 app.use("/api/saved-hotels", savedHotelsRoutes);
 app.use("/api/admin", pendingHotelsRoutes);
 app.use("/api", emailVerificationRoutes);
+app.use('/chapa', chapaRoutes);
 
 
 app.get("*", (req: Request, res: Response) => {

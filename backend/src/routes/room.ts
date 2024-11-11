@@ -52,21 +52,29 @@ router.get('/hotels/:hotelId/rooms', async (req, res) => {
       return res.status(404).json({ message: 'Hotel not found' });
     }
 
-    // Find all rooms associated with the hotel that are available
+    // Find all rooms associated with the hotel
     const rooms = await Room.find({ 
       hotelId: hotelId, 
-      availability: true, // Only get available rooms
-      numberOfRooms: { $gt: 0 }  // Exclude rooms with 0 available rooms
+      availability: true 
     });
 
-    res.json(rooms);
+    // Filter rooms based on availability
+    const availableRooms = rooms.filter(room => {
+      // If there are no rooms available, mark it as "No rooms available"
+      if (room.numberOfRooms === 0) {
+        return { ...room };
+      } else {
+        return { ...room, available: true };
+      }
+    });
+
+    res.json(availableRooms);
 
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
-
 // GET route to fetch a room by ID
 router.get(
   "/:id",

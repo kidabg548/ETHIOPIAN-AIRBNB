@@ -10,7 +10,9 @@ const bookingSchema = new mongoose.Schema<BookingType>({
   childCount: { type: Number, required: true },
   checkIn: { type: Date, required: true },
   checkOut: { type: Date, required: true },
-  userId: { type: String, required: true },
+  userId: { type: String, required: function() {
+    return this.isNew; // Only required for new documents
+  } },
   totalCost: { type: Number, required: true },
   hotelId: { type: mongoose.Schema.Types.ObjectId, ref: 'Hotel', required: function() {
     return this.isNew; // Only required for new documents
@@ -25,8 +27,8 @@ const bookingSchema = new mongoose.Schema<BookingType>({
   ],
   ticketNumber: { type: String, required: function() {
     return this.isNew; // Only required for new documents
-  }, unique: true } // Unique ticket number
-
+  }, unique: true },// Unique ticket number
+  status: { type: String, enum: ['pending', 'confirmed', 'cancelled'], default: 'pending' }
 });
 
 // Location Schema
@@ -79,7 +81,8 @@ const hotelSchema = new mongoose.Schema({
     type: String,
     enum: ['Pending', 'Approved', 'Rejected'],
     default: 'Pending' 
-  } 
+  },
+  // pdfFile: { type: Buffer, required: false },
 });
 // Middleware to update `lastUpdated` on document update
 hotelSchema.pre('save', function (next) {

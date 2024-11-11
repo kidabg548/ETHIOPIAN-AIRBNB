@@ -28,7 +28,7 @@ router.get("/search", async (req: Request, res: Response) => {
         sortOptions = { pricePerNight: 1 };
         break;
       case "pricePerNightDesc":
-        sortOptions = { pricePerNight: -1 };
+        sortOptions = { pricePerNight: -1 }; 
         break;
     }
 
@@ -175,7 +175,7 @@ router.post(
         rooms: Object.entries(req.body.rooms) 
             .map(([roomId, quantity]) => ({ roomId, quantity })),
         ticketNumber: generateTicketNumber(), // Generate and include ticket number here
-
+        status: "confirmed"
       };
 
       const hotel = await Hotel.findOneAndUpdate(
@@ -211,6 +211,7 @@ router.post(
         bookingId: booking._id, // Reference to the created booking
         transactionId: paymentIntent.id, // Stripe payment intent ID
         userId: req.userId, // User ID associated with the booking
+        ticketNumber: booking.ticketNumber,
         hotelId: req.params.hotelId, // Hotel ID
         amount: totalCost, // Total amount processed
         commissionAmount: commissionAmount, // Commission amount
@@ -284,6 +285,30 @@ const constructSearchQuery = (queryParams: any) => {
 
   return constructedQuery;
 };
+
+router.get('/cities/:country', async (req: Request, res: Response) => {
+  const { country } = req.params;
+  try {
+    const cities = await Hotel.aggregate([
+      { $match: { country } },  // Match the country
+      { $group: { _id: "$city", hotelCount: { $sum: 1 } } }  // Group by city and count hotels
+    ]);
+    res.json(cities.map(city => ({ city: city._id, hotelCount: city.hotelCount })));
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch cities' });
+  }
+});
+
+router.get('/hotels/:city', async (req: Request, res: Response) => {
+  const { city } = req.params;
+  try {
+    const hotels = await Hotel.find({ city });
+    res.json(hotels);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch hotels' });
+  }
+});
+
 
 
 

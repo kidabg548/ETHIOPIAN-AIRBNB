@@ -256,7 +256,6 @@ router.put(
         updatedUserDetails.profilePicture = profilePictureUrl; // Save the Cloudinary URL
       }
 
-
       // Update user details
       await user.updateOne(updatedUserDetails);
       res.status(200).json({ message: 'User details updated successfully' });
@@ -267,5 +266,33 @@ router.put(
   }
 );
 
+
+router.put('/deactivate', verifyToken, async (req: Request, res: Response) => {
+  const userId = req.userId;  // Assuming you store userId in the token
+
+  try {
+    // Find the user by ID
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Check if user is already deactivated
+    if (!user.isActive) {
+      return res.status(400).json({ message: "User is already deactivated" });
+    }
+
+    // Set isActive to false to deactivate the account
+    user.isActive = false;
+    await user.save();
+      // Clear the authentication cookie
+      res.clearCookie("auth_token");
+
+    res.status(200).json({ message: "Account deactivated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+});
 
 export default router;

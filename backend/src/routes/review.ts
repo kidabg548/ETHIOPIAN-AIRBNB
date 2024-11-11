@@ -33,10 +33,10 @@ router.post('/:hotelId/:bookingId',
       }
 
       // Check if checkout date has passed
-      const currentDate = new Date();
-      if (currentDate <= booking.checkOut) {
-        return res.status(400).json({ message: 'You can only review after the checkout date has passed' });
-      }
+      // const currentDate = new Date();
+      // if (currentDate <= booking.checkOut) {
+      //   return res.status(400).json({ message: 'You can only review after the checkout date has passed' });
+      // }
 
       // Check if a review already exists for this booking
       const existingReview = hotel.reviews.find((review) => review.bookingId === bookingId);
@@ -138,5 +138,32 @@ router.get('/:hotelId/reviews', async (req, res) => {
   } 
 });
 
+router.get('/:hotelId/review-count', async (req, res) => {
+  const { hotelId } = req.params;
+
+  try {
+    const count = await Review.countDocuments({ hotelId });
+    res.json({ count });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+router.get('/user', verifyToken, async (req, res) => {
+  try {
+      const userId = req.userId; // Get userId from verifyToken middleware
+      const userReviews = await Review.find({ userId }); // Find reviews by the user
+
+      if (userReviews.length === 0) {
+          return res.status(404).json({ message: 'No reviews found for this user.' });
+      }
+
+      res.json(userReviews);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error' });
+  }
+});
 
 export default router;

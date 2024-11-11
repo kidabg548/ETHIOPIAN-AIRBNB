@@ -21,7 +21,9 @@ const bookingSchema = new Schema<BookingType>({
   childCount: { type: Number, required: true },
   checkIn: { type: Date, required: true },
   checkOut: { type: Date, required: true },
-  userId: { type: String, required: true },
+  userId: { type: String, required: function() {
+    return this.isNew; // Only required for new documents
+  } },
   totalCost: { type: Number, required: true },
   hotelId: { type: mongoose.Schema.Types.ObjectId, ref: 'Hotel', required: function() {
     return this.isNew; // Only required for new documents
@@ -37,6 +39,8 @@ const bookingSchema = new Schema<BookingType>({
   ticketNumber: { type: String, required: function() {
     return this.isNew; // Only required for new documents
   }, unique: true },// Unique ticket number
+  status: { type: String, enum: ['pending', 'confirmed', 'cancelled'], default: 'pending' }
+
 
 });
 

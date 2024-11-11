@@ -1,7 +1,4 @@
-import { Types } from 'mongoose'; // Ensure you import both Schema and Types
-import { Document } from 'mongoose';
-
-
+import { Types, Document } from 'mongoose';
 
 export type UserType = {
   _id: string;
@@ -31,6 +28,7 @@ export type UserType = {
     expiryDate: Date;
   };
   verified: boolean;
+  isActive: boolean;
 }; 
 
 export type SavedHotelType = {
@@ -75,8 +73,8 @@ export type RoomType = {
   availability: boolean; // True if available, False if booked
   numberOfRooms: number;
   imageUrl?: string; // Optional image URL for the room
+  cancellationPolicy: string; // Add cancellationPolicy
 };
-
 
 export type HotelType = {
   _id: string;
@@ -96,6 +94,8 @@ export type HotelType = {
   averageRating?: number;
   rooms: RoomType[];
   status: 'Pending' | 'Approved' | 'Rejected';  // Add this field
+  reviewCount: number;
+  // pdfFile?: File; // Add this line to include pdfFile
 };
 
 export type NotificationType = {
@@ -125,6 +125,7 @@ export interface BookingType extends Document {
   ticketNumber: string; // New field for ticket number
   createdAt: Date;
   updatedAt: Date;
+  status: 'pending' | 'confirmed' | 'cancelled'; // Add status field
 }
 
 
@@ -137,7 +138,7 @@ export type HotelSearchResponse = {
     };
   };
 
-  export type PaymentIntentResponse = {
+export type PaymentIntentResponse = {
     paymentIntentId: string;
     clientSecret: string;
-  };
+};
