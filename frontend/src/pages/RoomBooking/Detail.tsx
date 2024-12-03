@@ -3,15 +3,18 @@ import { useParams } from "react-router-dom";
 import * as apiClient from "../../api-client";
 import { AiFillStar } from "react-icons/ai";
 import GuestInfoForm from "../../forms/GuestInfoForm2/GuestInfoForm";
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, lazy } from "react";
 import ReviewPage from "../ReviewPage";
-import { FaArrowLeft, FaArrowRight, FaExclamationTriangle } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaArrowRight,
+  FaExclamationTriangle,
+} from "react-icons/fa";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import cursorIcon from "leaflet/dist/images/marker-icon.png";
 import L from "leaflet";
-import ReviewForDetailPage from "../ReviewForDetailPage" 
-
+import ReviewForDetailPage from "../ReviewForDetailPage";
 
 const Detail2 = () => {
   const { hotelId } = useParams();
@@ -129,8 +132,6 @@ const Detail2 = () => {
     });
   };
 
-  
-
   if (!hotel || !rooms) {
     return <></>;
   }
@@ -156,6 +157,7 @@ const Detail2 = () => {
             {hotel.imageUrls.length > 0 && (
               <div className="h-[400px] flex">
                 <img
+                  loading="lazy"
                   src={hotel.imageUrls[0]}
                   alt={hotel.name}
                   className="rounded-md w-full h-full object-cover object-center"
@@ -281,7 +283,7 @@ const Detail2 = () => {
 
           {/* ReviewForDetailPage */}
           <div className="h-48 lg:h-[400px] rounded-lg overflow-hidden shadow-md">
-            <ReviewForDetailPage  />
+            <ReviewForDetailPage />
           </div>
         </div>
       </div>
@@ -332,16 +334,17 @@ const Detail2 = () => {
                   >
                     {room.roomType}
                     {room.numberOfRooms === 0 ? (
-                    <div className="text-red-500 flex items-center gap-2 mt-2">
-                      <FaExclamationTriangle />
-                      No available rooms
-                    </div>
-                  ) : room.numberOfRooms < 4 ? (
-                    <div className="text-red-500 flex items-center gap-2 mt-2">
-                      <FaExclamationTriangle />
-                      {room.numberOfRooms} available rooms of this type on our site
-                    </div>
-                  ) : null}
+                      <div className="text-red-500 flex items-center gap-2 mt-2">
+                        <FaExclamationTriangle />
+                        No available rooms
+                      </div>
+                    ) : room.numberOfRooms < 4 ? (
+                      <div className="text-red-500 flex items-center gap-2 mt-2">
+                        <FaExclamationTriangle />
+                        {room.numberOfRooms} available rooms of this type on our
+                        site
+                      </div>
+                    ) : null}
                   </td>
                   <td className="px-6 py-4 border-b border-slate-200">
                     {room.capacity}
@@ -417,7 +420,6 @@ const Detail2 = () => {
             <p>Capacity: {room.capacity} Guests</p>
             <p>Price Per Night: ${room.pricePerNight}</p>
             <p>Amenities: {room.amenities}</p>
-
 
             <ul>
               {room.amenities.map((amenity, index) => (
