@@ -88,17 +88,17 @@ const handleSaveClick = async (e: React.MouseEvent) => {
   }
 };
 
-
   return (
     <Link to={`/detail/${hotel._id}`} className="block">
       <div className="grid grid-cols-1 xl:grid-cols-[2fr_3fr] border border-slate-300 rounded-lg gap-4 shadow-md hover:shadow-lg transition-shadow duration-300 hover:bg-blue-50">
       <div className="w-full h-[300px] relative rounded-lg overflow-hidden">
   <img
+    loading="lazy"
     src={hotel.imageUrls[0]}
     alt={hotel.name}
     className="w-full h-full object-cover object-center"
   />
- 
+
   <div className="absolute bottom-4 left-4 bg-white p-2 rounded-lg text-sm font-bold text-gray-800">
     {hotel.type}
   </div>
