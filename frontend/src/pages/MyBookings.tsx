@@ -10,61 +10,68 @@ const MyBookings = () => {
   );
 
   if (!hotels || hotels.length === 0) {
-    return <span>No bookings found</span>;
+    return (
+      <div className="flex items-center justify-center h-screen text-gray-600">
+        <span className="text-xl">No bookings found</span>
+      </div>
+    );
   }
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold mb-6">My Bookings</h1>
-      <div className="flex flex-col items-center gap-6"> {/* Centered content */}
+    <div className="px-6 py-10 max-w-7xl mx-auto">
+      <h1 className="text-4xl font-extrabold mb-8 text-center text-gray-800 tracking-tight">
+        My Bookings
+      </h1>
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {hotels.map((hotel) => (
           <div
             key={hotel._id}
-            className="grid grid-cols-1 lg:grid-cols-[200px_1fr] border border-slate-300 rounded-xl p-6 gap-6 w-full max-w-7xl relative transition-transform duration-300 hover:scale-105 hover:shadow-lg" 
-            // Limited the width and kept curved corners
+            className="bg-white shadow-xl rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-2xl"
           >
             {/* Hotel Image */}
-            <div className="w-[400px] h-[300px] overflow-hidden rounded-lg">
+            <div className="relative h-60">
               <img
                 src={hotel.imageUrls[0]}
-                className="w-full h-full object-cover object-center transform transition-transform duration-500 hover:scale-110"
+                className="w-full h-full object-cover object-center"
                 alt={`${hotel.name} image`}
               />
+              <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black to-transparent p-4 w-full">
+                <h2 className="text-xl font-bold text-white truncate">
+                  {hotel.name}
+                </h2>
+                <p className="text-sm text-gray-300">
+                  {hotel.city}, {hotel.country}
+                </p>
+              </div>
             </div>
 
-            {/* Scrollable Booking Details */}
-            <div className="flex flex-col gap-4 overflow-y-auto max-h-[250px]">
-              <div className="text-xl font-bold"> {/* Adjusted text size */}
-                {hotel.name}
-                <div className="text-xs font-normal">{hotel.city}, {hotel.country}</div>
-              </div>
-
-              {/* Scrollable Bookings */}
+            {/* Booking Details */}
+            <div className="p-6 space-y-4">
               {hotel.bookings.map((booking) => (
-                <div key={booking._id} className="space-y-1">
-                  <div>
-                    <span className="font-bold mr-2">Dates: </span>
-                    <span>{new Date(booking.checkIn).toDateString()} - {new Date(booking.checkOut).toDateString()}</span>
-                  </div>
-                  <div>
-                    <span className="font-bold mr-2">Guests:</span>
-                    <span>{booking.adultCount} adults, {booking.childCount} children</span>
+                <div key={booking._id} className="bg-gray-50 p-4 rounded-lg shadow-sm">
+                  <div className="text-sm text-gray-500">Dates</div>
+                  <div className="text-gray-800">
+                    {new Date(booking.checkIn).toDateString()} - {new Date(booking.checkOut).toDateString()}
                   </div>
 
-                  {/* Ticket Number */}
-                  <div>
-                    <span className="ml-48 font-bold mr-2">Ticket Number:</span>
-                    <span>{booking.ticketNumber}</span>
+                  <div className="text-sm text-gray-500 mt-2">Guests</div>
+                  <div className="text-gray-800">
+                    {booking.adultCount} adults, {booking.childCount} children
+                  </div>
+
+                  <div className="text-sm text-gray-500 mt-2">Ticket Number</div>
+                  <div className="text-gray-800 font-mono bg-gray-100 px-2 py-1 rounded">
+                    {booking.ticketNumber}
                   </div>
 
                   {/* Write Review Button */}
                   {new Date() > new Date(booking.checkOut) && (
                     <Link to={`/hotel/${hotel._id}/${booking._id}/review`}>
-                      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg absolute bottom-4 right-4">
+                      <button className="mt-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white text-sm font-semibold py-2 px-4 rounded-lg shadow-md">
                         Write a Review
                       </button>
                     </Link>
-                   )} 
+                  )}
                 </div>
               ))}
             </div>
