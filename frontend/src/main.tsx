@@ -19,9 +19,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <AppContextProvider>
         <SearchContextProvider>
-    <App />
-    </SearchContextProvider>
-    </AppContextProvider>
+          <App />
+        </SearchContextProvider>
+      </AppContextProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );
