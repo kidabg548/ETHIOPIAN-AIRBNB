@@ -17,7 +17,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
 type Props = {
   currentUser: UserType;
   paymentIntent: PaymentIntentResponse;
-  totalCost: number; // Add totalPrice here
+  totalCost: number; 
   selectedRooms: { [key: string]: number };
 };
 
@@ -69,9 +69,9 @@ const BookingForm2 = ({ currentUser, paymentIntent, totalCost, selectedRooms  }:
       checkIn: search.checkIn.toISOString(),
       checkOut: search.checkOut.toISOString(),
       hotelId: hotelId || "", 
-      totalCost: totalCost,  // Ensure this is being set correctly
+      totalCost: totalCost,  
       paymentIntentId: paymentIntent.paymentIntentId,
-      paymentMethod: "stripe", // Default to stripe
+      paymentMethod: "stripe", 
     },
   });
 
